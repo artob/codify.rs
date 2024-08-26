@@ -7,3 +7,14 @@ pub enum Type {
     /// See: https://docs.python.org/3/library/stdtypes.html#boolean-type-bool
     Bool,
 }
+
+impl core::str::FromStr for Type {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        Ok(match input {
+            "bool" => Self::Bool,
+            _ => return Err(()),
+        })
+    }
+}

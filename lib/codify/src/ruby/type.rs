@@ -7,3 +7,14 @@ pub enum Type {
     /// See: https://thoughtbot.com/blog/what-is-a-boolean
     Boolean,
 }
+
+impl core::str::FromStr for Type {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        Ok(match input {
+            "Boolean" => Self::Boolean,
+            _ => return Err(()),
+        })
+    }
+}

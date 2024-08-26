@@ -7,3 +7,14 @@ pub enum Type {
     /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html
     Boolean,
 }
+
+impl core::str::FromStr for Type {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        Ok(match input {
+            "boolean" => Self::Boolean,
+            _ => return Err(()),
+        })
+    }
+}
