@@ -12,9 +12,19 @@ impl core::str::FromStr for Type {
     type Err = ();
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
+        use Type::*;
         Ok(match input {
-            "Boolean" => Self::Boolean,
+            "Boolean" => Boolean,
             _ => return Err(()),
         })
+    }
+}
+
+impl core::fmt::Display for Type {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        use Type::*;
+        match self {
+            Boolean => write!(f, "Boolean"),
+        }
     }
 }
