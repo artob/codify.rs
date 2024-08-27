@@ -19,33 +19,33 @@ publish.workspace = true
 [features]
 default = ["all", "cli", "std"]
 all = [
-    "lang-c",
-    "lang-cpp",
-    "lang-csharp",
-    "lang-dart",
-    "lang-go",
-    "lang-java",
-    "lang-javascript",
-    "lang-python",
-    "lang-ruby",
-    "lang-rust",
-    "lang-swift",
-    "lang-typescript",
+    "language-c",
+    "language-cpp",
+    "language-csharp",
+    "language-dart",
+    "language-go",
+    "language-java",
+    "language-javascript",
+    "language-python",
+    "language-ruby",
+    "language-rust",
+    "language-swift",
+    "language-typescript",
     "serde",
 ]
 cli = ["std", "dep:clap", "dep:clientele"]
-lang-c = []
-lang-cpp = []
-lang-csharp = []
-lang-dart = []
-lang-go = []
-lang-java = []
-lang-javascript = []
-lang-python = []
-lang-ruby = []
-lang-rust = []
-lang-swift = []
-lang-typescript = []
+language-c = []
+language-cpp = []
+language-csharp = []
+language-dart = []
+language-go = []
+language-java = []
+language-javascript = []
+language-python = []
+language-ruby = []
+language-rust = []
+language-swift = []
+language-typescript = []
 serde = ["dep:serde"]
 std = ["clap?/std", "clientele?/std", "serde?/std"]
 

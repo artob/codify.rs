@@ -14,62 +14,65 @@ mod prelude;
 mod feature;
 pub use feature::*;
 
-#[cfg(feature = "lang-c")]
+mod language;
+pub use language::*;
+
+#[cfg(feature = "language-c")]
 pub mod c {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-cpp")]
+#[cfg(feature = "language-cpp")]
 pub mod cpp {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-csharp")]
+#[cfg(feature = "language-csharp")]
 pub mod csharp {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-dart")]
+#[cfg(feature = "language-dart")]
 pub mod dart {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-go")]
+#[cfg(feature = "language-go")]
 pub mod go {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-java")]
+#[cfg(feature = "language-java")]
 pub mod java {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-javascript")]
+#[cfg(feature = "language-javascript")]
 pub mod javascript {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-python")]
+#[cfg(feature = "language-python")]
 pub mod python {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-ruby")]
+#[cfg(feature = "language-ruby")]
 pub mod ruby {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-rust")]
+#[cfg(feature = "language-rust")]
 pub mod rust {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-swift")]
+#[cfg(feature = "language-swift")]
 pub mod swift {
     pub mod r#type;
 }
 
-#[cfg(feature = "lang-typescript")]
+#[cfg(feature = "language-typescript")]
 pub mod typescript {
     pub mod r#type;
 }
