@@ -4,6 +4,8 @@
 [![Compatibility](https://img.shields.io/badge/rust-1.70%2B-blue)](https://rust-lang.org)
 [![Package](https://img.shields.io/crates/v/codify)](https://crates.io/crates/codify)
 
+**Codify.rs translates between types from different programming languages.**
+
 🚧 _This is presently under heavy construction._
 
 ## 🛠️ Prerequisites
@@ -24,6 +26,12 @@ cargo add codify
 
 ```rust
 use codify::*;
+```
+
+### Converting a C++ type to Rust
+
+```rust
+println!("{}", cpp::Type::Bool.to_rust());
 ```
 
 ## 📚 Reference

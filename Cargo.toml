@@ -10,14 +10,14 @@ version = "0.0.0"
 authors = ["Arto Bendiken"]
 edition = "2021"
 rust-version = "1.70"
-description = "Codify.rs"
+description = "Codify.rs translates between types from different programming languages."
 #documentation = "https://docs.rs/codify/"
 readme = true
 homepage = "https://codify.rs"
 repository = "https://github.com/artob/codify.rs"
 license = "Unlicense"
-keywords = []
-categories = ["no-std"]
+keywords = ["abi", "ffi", "polyglot"]
+categories = ["command-line-utilities", "development-tools::ffi", "no-std"]
 publish = true
 
 [workspace.dependencies]
