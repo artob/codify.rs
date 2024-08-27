@@ -17,6 +17,9 @@ pub use feature::*;
 mod language;
 pub use language::*;
 
+mod r#type;
+pub use r#type::*;
+
 #[cfg(feature = "language-c")]
 pub mod c {
     pub mod r#type;

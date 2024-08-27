@@ -8,6 +8,8 @@ pub enum Type {
     Bool,
 }
 
+impl crate::Type for Type {}
+
 impl core::str::FromStr for Type {
     type Err = ();
 
