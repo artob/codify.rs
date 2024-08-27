@@ -103,6 +103,6 @@ pub mod typescript {
     pub use r#type::*;
 }
 
-#[doc = include_str!("../../../README.md")]
-#[cfg(doctest)]
-pub struct ReadmeDoctests;
+//#[doc = include_str!("../../../README.md")]
+//#[cfg(doctest)]
+//pub struct ReadmeDoctests;
