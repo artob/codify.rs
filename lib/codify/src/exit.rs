@@ -21,14 +21,14 @@ impl std::error::Error for ExitCode {}
 
 impl From<std::boxed::Box<dyn std::error::Error>> for ExitCode {
     fn from(error: std::boxed::Box<dyn std::error::Error>) -> Self {
-        std::eprintln!("{}: {:?}", "codify", error);
+        std::eprintln!("codify: {:?}", error);
         Self(SysexitsError::from(error))
     }
 }
 
 impl From<std::io::Error> for ExitCode {
     fn from(error: std::io::Error) -> Self {
-        std::eprintln!("{}: {:?}", "codify", error);
+        std::eprintln!("codify: {:?}", error);
         Self(SysexitsError::from(error))
     }
 }
