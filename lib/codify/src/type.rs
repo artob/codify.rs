@@ -2,4 +2,6 @@
 
 use core::fmt::Display;
 
-pub trait Type: Display {}
+pub trait Type: Display {
+    fn to_rust(&self) -> crate::rust::Type;
+}
