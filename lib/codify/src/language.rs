@@ -4,6 +4,7 @@
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Language {
+    Rust,
     #[cfg(feature = "language-c")]
     C,
     #[cfg(feature = "language-cpp")]
@@ -22,8 +23,6 @@ pub enum Language {
     Python,
     #[cfg(feature = "language-ruby")]
     Ruby,
-    #[cfg(feature = "language-rust")]
-    Rust,
     #[cfg(feature = "language-swift")]
     Swift,
     #[cfg(feature = "language-typescript")]
@@ -34,6 +33,7 @@ impl Language {
     pub fn as_str(&self) -> &'static str {
         use Language::*;
         match self {
+            Rust => "rust",
             #[cfg(feature = "language-c")]
             C => "c",
             #[cfg(feature = "language-cpp")]
@@ -52,8 +52,6 @@ impl Language {
             Python => "python",
             #[cfg(feature = "language-ruby")]
             Ruby => "ruby",
-            #[cfg(feature = "language-rust")]
-            Rust => "rust",
             #[cfg(feature = "language-swift")]
             Swift => "swift",
             #[cfg(feature = "language-typescript")]
@@ -68,6 +66,7 @@ impl core::str::FromStr for Language {
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         use Language::*;
         Ok(match input {
+            "rust" => Rust,
             #[cfg(feature = "language-c")]
             "c" => C,
             #[cfg(feature = "language-cpp")]
@@ -86,8 +85,6 @@ impl core::str::FromStr for Language {
             "python" => Python,
             #[cfg(feature = "language-ruby")]
             "ruby" => Ruby,
-            #[cfg(feature = "language-rust")]
-            "rust" => Rust,
             #[cfg(feature = "language-swift")]
             "swift" => Swift,
             #[cfg(feature = "language-typescript")]
