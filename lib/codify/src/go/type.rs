@@ -8,6 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://go.dev/ref/spec#Boolean_types
     Bool,
+    /// See: https://go.dev/ref/spec#Numeric_types
+    Float32,
+    /// See: https://go.dev/ref/spec#Numeric_types
+    Float64,
 }
 
 impl core::str::FromStr for Type {
@@ -17,6 +21,8 @@ impl core::str::FromStr for Type {
         use Type::*;
         Ok(match input {
             "bool" => Bool,
+            "float32" => Float32,
+            "float64" => Float64,
             _ => return Err(()),
         })
     }
@@ -27,6 +33,8 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Bool => write!(f, "bool"),
+            Float32 => write!(f, "float32"),
+            Float64 => write!(f, "float64"),
         }
     }
 }
@@ -38,6 +46,8 @@ impl TryFrom<rust::Type> for Type {
         use Type::*;
         Ok(match input {
             rust::Type::Bool => Bool,
+            rust::Type::F32 => Float32,
+            rust::Type::F64 => Float64,
             _ => return Err(()),
         })
     }
@@ -48,6 +58,8 @@ impl crate::Type for Type {
         use Type::*;
         match self {
             Bool => rust::Type::Bool,
+            Float32 => rust::Type::F32,
+            Float64 => rust::Type::F64,
         }
     }
 }

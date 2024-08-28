@@ -8,6 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://doc.rust-lang.org/reference/types/boolean.html
     Bool,
+    /// See: https://doc.rust-lang.org/reference/types/numeric.html#floating-point-types
+    F32,
+    /// See: https://doc.rust-lang.org/reference/types/numeric.html#floating-point-types
+    F64,
 }
 
 impl core::str::FromStr for Type {
@@ -17,6 +21,8 @@ impl core::str::FromStr for Type {
         use Type::*;
         Ok(match input {
             "bool" => Bool,
+            "f32" => F32,
+            "f64" => F64,
             _ => return Err(()),
         })
     }
@@ -27,6 +33,8 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Bool => write!(f, "bool"),
+            F32 => write!(f, "f32"),
+            F64 => write!(f, "f64"),
         }
     }
 }

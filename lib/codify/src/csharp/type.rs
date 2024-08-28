@@ -8,6 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool
     Bool,
+    /// See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
+    Float,
+    /// See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
+    Double,
 }
 
 impl core::str::FromStr for Type {
@@ -17,6 +21,8 @@ impl core::str::FromStr for Type {
         use Type::*;
         Ok(match input {
             "bool" => Bool,
+            "float" => Float,
+            "double" => Double,
             _ => return Err(()),
         })
     }
@@ -27,6 +33,8 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Bool => write!(f, "bool"),
+            Float => write!(f, "float"),
+            Double => write!(f, "double"),
         }
     }
 }
@@ -38,6 +46,8 @@ impl TryFrom<rust::Type> for Type {
         use Type::*;
         Ok(match input {
             rust::Type::Bool => Bool,
+            rust::Type::F32 => Float,
+            rust::Type::F64 => Double,
             _ => return Err(()),
         })
     }
@@ -48,6 +58,8 @@ impl crate::Type for Type {
         use Type::*;
         match self {
             Bool => rust::Type::Bool,
+            Float => rust::Type::F32,
+            Double => rust::Type::F64,
         }
     }
 }

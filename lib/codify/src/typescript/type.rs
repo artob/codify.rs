@@ -8,6 +8,8 @@ use crate::rust;
 pub enum Type {
     /// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#boolean_type
     Boolean,
+    /// See: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+    Number,
 }
 
 impl core::str::FromStr for Type {
@@ -17,6 +19,7 @@ impl core::str::FromStr for Type {
         use Type::*;
         Ok(match input {
             "boolean" => Boolean,
+            "number" => Number,
             _ => return Err(()),
         })
     }
@@ -27,6 +30,7 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Boolean => write!(f, "boolean"),
+            Number => write!(f, "number"),
         }
     }
 }
@@ -38,6 +42,7 @@ impl TryFrom<rust::Type> for Type {
         use Type::*;
         Ok(match input {
             rust::Type::Bool => Boolean,
+            rust::Type::F32 | rust::Type::F64 => Number,
             _ => return Err(()),
         })
     }
@@ -48,6 +53,7 @@ impl crate::Type for Type {
         use Type::*;
         match self {
             Boolean => rust::Type::Bool,
+            Number => rust::Type::F64,
         }
     }
 }

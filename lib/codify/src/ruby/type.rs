@@ -8,6 +8,8 @@ use crate::rust;
 pub enum Type {
     /// See: https://thoughtbot.com/blog/what-is-a-boolean
     Boolean,
+    /// See: https://en.wikibooks.org/wiki/Ruby_Programming/Data_types
+    Float,
 }
 
 impl core::str::FromStr for Type {
@@ -16,7 +18,8 @@ impl core::str::FromStr for Type {
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         use Type::*;
         Ok(match input {
-            "Boolean" => Boolean,
+            "Boolean" | "TrueClass" | "FalseClass" => Boolean,
+            "Float" => Float,
             _ => return Err(()),
         })
     }
@@ -27,6 +30,7 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Boolean => write!(f, "Boolean"),
+            Float => write!(f, "Float"),
         }
     }
 }
@@ -38,6 +42,7 @@ impl TryFrom<rust::Type> for Type {
         use Type::*;
         Ok(match input {
             rust::Type::Bool => Boolean,
+            rust::Type::F32 | rust::Type::F64 => Float,
             _ => return Err(()),
         })
     }
@@ -48,6 +53,7 @@ impl crate::Type for Type {
         use Type::*;
         match self {
             Boolean => rust::Type::Bool,
+            Float => rust::Type::F64,
         }
     }
 }

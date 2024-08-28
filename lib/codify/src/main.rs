@@ -22,7 +22,7 @@ struct Options {
     flags: StandardOptions,
 
     #[command(subcommand)]
-    command: Command,
+    command: Option<Command>,
 }
 
 #[derive(Debug, Subcommand)]
@@ -55,7 +55,7 @@ pub fn main() -> Result<(), ExitCode> {
         return Ok(());
     }
 
-    match options.command {
+    match options.command.unwrap() {
         Command::Convert { r#type } => convert(r#type),
     }
 }

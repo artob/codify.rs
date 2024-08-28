@@ -8,6 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html
     Boolean,
+    /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Float.html
+    Float,
+    /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html
+    Double,
 }
 
 impl core::str::FromStr for Type {
@@ -17,6 +21,8 @@ impl core::str::FromStr for Type {
         use Type::*;
         Ok(match input {
             "boolean" => Boolean,
+            "float" => Float,
+            "double" => Double,
             _ => return Err(()),
         })
     }
@@ -27,6 +33,8 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Boolean => write!(f, "boolean"),
+            Float => write!(f, "float"),
+            Double => write!(f, "double"),
         }
     }
 }
@@ -38,6 +46,8 @@ impl TryFrom<rust::Type> for Type {
         use Type::*;
         Ok(match input {
             rust::Type::Bool => Boolean,
+            rust::Type::F32 => Float,
+            rust::Type::F64 => Double,
             _ => return Err(()),
         })
     }
@@ -48,6 +58,8 @@ impl crate::Type for Type {
         use Type::*;
         match self {
             Boolean => rust::Type::Bool,
+            Float => rust::Type::F32,
+            Double => rust::Type::F64,
         }
     }
 }

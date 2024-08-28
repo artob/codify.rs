@@ -8,6 +8,8 @@ use crate::rust;
 pub enum Type {
     /// See: https://docs.python.org/3/library/stdtypes.html#boolean-type-bool
     Bool,
+    /// See: https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex
+    Float,
 }
 
 impl core::str::FromStr for Type {
@@ -17,6 +19,7 @@ impl core::str::FromStr for Type {
         use Type::*;
         Ok(match input {
             "bool" => Bool,
+            "float" => Float,
             _ => return Err(()),
         })
     }
@@ -27,6 +30,7 @@ impl core::fmt::Display for Type {
         use Type::*;
         match self {
             Bool => write!(f, "bool"),
+            Float => write!(f, "float"),
         }
     }
 }
@@ -38,6 +42,7 @@ impl TryFrom<rust::Type> for Type {
         use Type::*;
         Ok(match input {
             rust::Type::Bool => Bool,
+            rust::Type::F32 | rust::Type::F64 => Float,
             _ => return Err(()),
         })
     }
@@ -48,6 +53,7 @@ impl crate::Type for Type {
         use Type::*;
         match self {
             Bool => rust::Type::Bool,
+            Float => rust::Type::F64,
         }
     }
 }
