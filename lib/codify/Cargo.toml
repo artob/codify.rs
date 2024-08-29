@@ -47,7 +47,7 @@ language-rust = []
 language-swift = []
 language-typescript = []
 serde = ["dep:serde"]
-std = ["clap?/std", "clientele?/std", "serde?/std"]
+std = ["clap?/std", "clientele?/std", "itertools/use_std", "serde?/std"]
 
 [build-dependencies]
 shadow-rs = { version = "0.26", features = ["tzdb"], default-features = false }
@@ -64,6 +64,7 @@ clientele = { version = "=0.1.3", default-features = false, features = [
     "unicode",
     "wild",
 ], optional = true }
+itertools = { version = "0.13", default-features = false }
 serde = { version = "1.0", default-features = false, features = [
     "derive",
 ], optional = true }
