@@ -109,12 +109,12 @@ impl crate::Type for Type {
     fn to_rust(&self) -> rust::Type {
         use Type::*;
         match self {
-            Dynamic => todo!(),  //rust::Type::Any,
-            NilClass => todo!(), //rust::Type::Unit,
+            Dynamic => todo!(), //rust::Type::Any,
+            NilClass => rust::Type::Unit,
             Boolean => rust::Type::Bool,
             Float => rust::Type::F64,
-            Integer => todo!(),    //rust::Type::I64,
-            String => todo!(),     //rust::Type::String,
+            Integer => rust::Type::I64, // TODO: what is the best choice here?
+            String => rust::Type::String,
             Symbol => todo!(),     //rust::Type::String,
             Array(t) => todo!(),   //rust::Type::Array(Box::new(t.to_rust())),
             Hash(k, v) => todo!(), //rust::Type::Map(Box::new(k.to_rust()), Box::new(v.to_rust())),
