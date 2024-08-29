@@ -120,8 +120,10 @@ impl core::fmt::Display for Type {
 
 //impl TryFrom<rust::Type> for Type {}
 
-impl crate::Type for Type {
-    fn to_rust(&self) -> rust::Type {
-        self.clone()
+impl crate::ToRust for Type {
+    fn to_rust(&self) -> Option<rust::Type> {
+        Some(self.clone())
     }
 }
+
+impl crate::Type for Type {}

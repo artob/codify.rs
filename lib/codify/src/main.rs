@@ -72,7 +72,11 @@ pub fn convert(
         .parse_type(&input_type)
         .expect("input type syntax should have been validated");
 
-    let output_type = output_language.from_type(input_type.to_rust())?;
+    let output_type = output_language.from_type(
+        input_type
+            .to_rust()
+            .expect("input type should be convertible to a Rust type"),
+    )?;
 
     println!("{}", output_type);
 

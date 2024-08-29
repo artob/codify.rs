@@ -53,13 +53,15 @@ impl TryFrom<rust::Type> for Type {
     }
 }
 
-impl crate::Type for Type {
-    fn to_rust(&self) -> rust::Type {
+impl crate::ToRust for Type {
+    fn to_rust(&self) -> Option<rust::Type> {
         use Type::*;
-        match self {
+        Some(match self {
             Boolean => rust::Type::Bool,
             Float => rust::Type::F32,
             Double => rust::Type::F64,
-        }
+        })
     }
 }
+
+impl crate::Type for Type {}

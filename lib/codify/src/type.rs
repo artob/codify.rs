@@ -2,6 +2,8 @@
 
 use core::fmt::{self, Debug, Display};
 
-pub trait Type: Debug + Display {
-    fn to_rust(&self) -> crate::rust::Type;
+pub trait ToRust {
+    fn to_rust(&self) -> Option<crate::rust::Type>;
 }
+
+pub trait Type: ToRust + Debug + Display {}

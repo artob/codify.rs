@@ -105,21 +105,23 @@ impl TryFrom<rust::Type> for Type {
     }
 }
 
-impl crate::Type for Type {
-    fn to_rust(&self) -> rust::Type {
+impl crate::ToRust for Type {
+    fn to_rust(&self) -> Option<rust::Type> {
         use Type::*;
-        match self {
-            Dynamic => todo!(), //rust::Type::Any,
+        Some(match self {
+            Dynamic => return None, //rust::Type::Any,
             NilClass => rust::Type::Unit,
             Boolean => rust::Type::Bool,
             Float => rust::Type::F64,
             Integer => rust::Type::I64, // TODO: what is the best choice here?
             String => rust::Type::String,
-            Symbol => todo!(),     //rust::Type::String,
+            Symbol => return None,
             Array(t) => todo!(),   //rust::Type::Array(Box::new(t.to_rust())),
             Hash(k, v) => todo!(), //rust::Type::Map(Box::new(k.to_rust()), Box::new(v.to_rust())),
             Range => todo!(),      //rust::Type::Range,
-            Other(_) => todo!(),   //rust::Type::Any,
-        }
+            Other(_) => return None,
+        })
     }
 }
+
+impl crate::Type for Type {}
