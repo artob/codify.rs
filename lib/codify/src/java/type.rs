@@ -20,9 +20,9 @@ impl core::str::FromStr for Type {
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         use Type::*;
         Ok(match input {
-            "boolean" => Boolean,
-            "float" => Float,
-            "double" => Double,
+            "boolean" | "Boolean" => Boolean,
+            "float" | "Float" => Float,
+            "double" | "Double" => Double,
             _ => return Err(()),
         })
     }

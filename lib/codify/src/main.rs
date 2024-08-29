@@ -29,9 +29,13 @@ struct Options {
 enum Command {
     /// Convert a type from one language to another
     Convert {
-        /// The input type (e.g., "cpp:bool")
+        /// The qualified source type (e.g., "cpp:float")
         #[clap(value_parser = parse_type)]
-        r#type: (Language, String),
+        source: (Language, String),
+
+        /// The target language (e.g., "go")
+        #[clap(value_parser = parse_language, default_value = "rust")]
+        target: Language,
     },
 }
 
@@ -56,19 +60,27 @@ pub fn main() -> Result<(), ExitCode> {
     }
 
     match options.command.unwrap() {
-        Command::Convert { r#type } => convert(r#type),
+        Command::Convert { source, target } => convert(source, target),
     }
 }
 
-pub fn convert((input_language, input_type): (Language, String)) -> Result<(), ExitCode> {
+pub fn convert(
+    (input_language, input_type): (Language, String),
+    output_language: Language,
+) -> Result<(), ExitCode> {
     let input_type = input_language
         .parse_type(&input_type)
         .expect("input type syntax should have been validated");
 
-    let output_type = input_type.to_rust();
+    let output_type = output_language.from_type(input_type.to_rust())?;
+
     println!("{}", output_type);
 
     Ok(())
+}
+
+fn parse_language(input: &str) -> Result<Language, TypeParseError> {
+    Ok(Language::from_str(input).map_err(|_| TypeParseError::InvalidLanguage)?)
 }
 
 fn parse_type(input: &str) -> Result<(Language, String), TypeParseError> {

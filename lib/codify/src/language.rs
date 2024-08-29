@@ -1,7 +1,10 @@
 // This is free and unencumbered software released into the public domain.
 
 use super::Type;
-use crate::prelude::{Box, FromStr};
+use crate::{
+    prelude::{Box, FromStr},
+    rust,
+};
 
 /// A programming language.
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -123,6 +126,46 @@ impl Language {
             TypeScript => Box::new(crate::typescript::Type::from_str(input)?),
 
             _ => return Err(()),
+        })
+    }
+
+    pub fn from_type(&self, input: rust::Type) -> Result<Box<dyn Type>, ()> {
+        use Language::*;
+        Ok(match self {
+            Rust => Box::new(input),
+
+            #[cfg(feature = "language-c")]
+            C => Box::new(crate::c::Type::try_from(input)?),
+
+            #[cfg(feature = "language-cpp")]
+            Cpp => Box::new(crate::cpp::Type::try_from(input)?),
+
+            #[cfg(feature = "language-csharp")]
+            Csharp => Box::new(crate::csharp::Type::try_from(input)?),
+
+            #[cfg(feature = "language-dart")]
+            Dart => Box::new(crate::dart::Type::try_from(input)?),
+
+            #[cfg(feature = "language-go")]
+            Go => Box::new(crate::go::Type::try_from(input)?),
+
+            #[cfg(feature = "language-java")]
+            Java => Box::new(crate::java::Type::try_from(input)?),
+
+            #[cfg(feature = "language-javascript")]
+            JavaScript => Box::new(crate::javascript::Type::try_from(input)?),
+
+            #[cfg(feature = "language-python")]
+            Python => Box::new(crate::python::Type::try_from(input)?),
+
+            #[cfg(feature = "language-ruby")]
+            Ruby => Box::new(crate::ruby::Type::try_from(input)?),
+
+            #[cfg(feature = "language-swift")]
+            Swift => Box::new(crate::swift::Type::try_from(input)?),
+
+            #[cfg(feature = "language-typescript")]
+            TypeScript => Box::new(crate::typescript::Type::try_from(input)?),
         })
     }
 }

@@ -32,3 +32,10 @@ impl From<std::io::Error> for ExitCode {
         Self(SysexitsError::from(error))
     }
 }
+
+impl From<()> for ExitCode {
+    fn from(error: ()) -> Self {
+        std::eprintln!("codify: {:?}", error);
+        Self(SysexitsError::EX_SOFTWARE)
+    }
+}
