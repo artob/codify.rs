@@ -11,7 +11,7 @@ use itertools::Itertools;
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Type {
     /// See: https://ruby-doc.org/3.3.0/Object.html
-    Dynamic,
+    Object,
     /// See: https://ruby-doc.org/3.3.0/NilClass.html
     NilClass,
     /// See: https://ruby-doc.org/3.3.0/TrueClass.html
@@ -21,6 +21,8 @@ pub enum Type {
     Float,
     /// See: https://ruby-doc.org/3.3.0/Integer.html
     Integer,
+    /// See: https://ruby-doc.org/3.3.0/Range.html
+    Range,
     /// See: https://ruby-doc.org/3.3.0/String.html
     String,
     /// See: https://ruby-doc.org/3.3.0/Symbol.html
@@ -29,8 +31,6 @@ pub enum Type {
     Array(Box<Type>),
     /// See: https://ruby-doc.org/3.3.0/Hash.html
     Hash(Box<Type>, Box<Type>),
-    /// See: https://ruby-doc.org/3.3.0/Range.html
-    Range,
     Other(String),
 }
 
@@ -40,16 +40,16 @@ impl core::str::FromStr for Type {
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         use Type::*;
         Ok(match input {
-            "Object" => Dynamic,
+            "Object" => Object,
             "NilClass" => NilClass,
             "Boolean" | "TrueClass" | "FalseClass" => Boolean,
             "Float" => Float,
             "Integer" => Integer,
+            "Range" => Range,
             "String" => String,
             "Symbol" => Symbol,
-            "Array" => Array(Box::new(Type::Dynamic)),
-            "Hash" => Hash(Box::new(Type::Dynamic), Box::new(Type::Dynamic)),
-            "Range" => Range,
+            "Array" => Array(Box::new(Type::Object)),
+            "Hash" => Hash(Box::new(Type::Object), Box::new(Type::Object)),
             _ => {
                 if input.starts_with("Array<") {
                     let inner = input
@@ -77,16 +77,16 @@ impl core::fmt::Display for Type {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         use Type::*;
         match self {
-            Dynamic => write!(f, "Object"),
+            Object => write!(f, "Object"),
             NilClass => write!(f, "NilClass"),
             Boolean => write!(f, "Boolean"),
             Float => write!(f, "Float"),
             Integer => write!(f, "Integer"),
+            Range => write!(f, "Range"),
             String => write!(f, "String"),
             Symbol => write!(f, "Symbol"),
             Array(t) => write!(f, "Array<{}>", t),
             Hash(k, v) => write!(f, "Hash{{{} => {}}}", k, v),
-            Range => write!(f, "Range"),
             Other(s) => write!(f, "{}", s),
         }
     }
@@ -109,17 +109,22 @@ impl crate::ToRust for Type {
     fn to_rust(&self) -> Option<rust::Type> {
         use Type::*;
         Some(match self {
-            Dynamic => return None, //rust::Type::Any,
+            Object => rust::Type::Any,
             NilClass => rust::Type::Unit,
             Boolean => rust::Type::Bool,
             Float => rust::Type::F64,
             Integer => rust::Type::I64, // TODO: what is the best choice here?
+            Range => rust::Type::Range(Box::new(rust::Type::I64)),
             String => rust::Type::String,
-            Symbol => return None,
-            Array(t) => todo!(),   //rust::Type::Array(Box::new(t.to_rust())),
-            Hash(k, v) => todo!(), //rust::Type::Map(Box::new(k.to_rust()), Box::new(v.to_rust())),
-            Range => todo!(),      //rust::Type::Range,
-            Other(_) => return None,
+            Symbol => return None, // no equivalent in Rust
+            Array(t) => return t.to_rust().map(|t| rust::Type::Vec(Box::new(t))),
+            Hash(k, v) => {
+                return k.to_rust().and_then(|k| {
+                    v.to_rust()
+                        .and_then(|v| Some(rust::Type::Map(Box::new(k), Box::new(v))))
+                })
+            }
+            Other(_) => return None, // unknown equivalent in Rust
         })
     }
 }

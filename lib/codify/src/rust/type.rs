@@ -9,6 +9,8 @@ use crate::{
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Type {
+    /// See: https://doc.rust-lang.org/core/any/index.html
+    Any,
     /// See: https://doc.rust-lang.org/reference/types/tuple.html
     Unit,
     /// See: https://doc.rust-lang.org/reference/types/boolean.html
@@ -41,12 +43,20 @@ pub enum Type {
     I128,
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#machine-dependent-integer-types
     Isize,
+    /// See: https://doc.rust-lang.org/core/ops/struct.Range.html
+    Range(Box<Type>),
     /// See: https://doc.rust-lang.org/reference/types/textual.html
     Char,
     /// See: https://doc.rust-lang.org/reference/types/textual.html
     Str,
-    /// See: https://doc.rust-lang.org/std/string/struct.String.html
+    /// See: https://doc.rust-lang.org/alloc/string/struct.String.html
     String,
+    /// See: https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html
+    Box(Box<Type>),
+    /// See: https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html
+    Vec(Box<Type>),
+    /// See: https://doc.rust-lang.org/alloc/collections/btree_map/struct.BTreeMap.html
+    Map(Box<Type>, Box<Type>),
     /// See: https://doc.rust-lang.org/reference/types/pointer.html#shared-references-
     Ref(Box<Type>),
     /// See: https://doc.rust-lang.org/reference/types/pointer.html#mutable-references-mut
@@ -61,8 +71,10 @@ impl core::str::FromStr for Type {
     type Err = ();
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
+        use crate::prelude::Box;
         use Type::*;
         Ok(match input {
+            "Any" => Any,
             "()" => Unit,
             "bool" => Bool,
             "f32" => F32,
@@ -82,7 +94,37 @@ impl core::str::FromStr for Type {
             "char" => Char,
             "str" => Str,
             "String" => String,
-            _ => return Err(()),
+            _ => {
+                if input.starts_with("Range<") && input.ends_with('>') {
+                    Range(Box::new(input[6..input.len() - 1].parse()?))
+                } else if input.starts_with("Box<") && input.ends_with('>') {
+                    Type::Box(Box::new(input[4..input.len() - 1].parse()?))
+                } else if input.starts_with("Vec<") && input.ends_with('>') {
+                    Vec(Box::new(input[4..input.len() - 1].parse()?))
+                } else if input.starts_with("Map<") && input.ends_with('>') {
+                    let mut parts = input[4..input.len() - 1].split(',');
+                    Map(
+                        Box::new(parts.next().unwrap().parse()?),
+                        Box::new(parts.next().unwrap().parse()?),
+                    )
+                } else if input.starts_with("BTreeMap<") && input.ends_with('>') {
+                    let mut parts = input[9..input.len() - 1].split(',');
+                    Map(
+                        Box::new(parts.next().unwrap().parse()?),
+                        Box::new(parts.next().unwrap().parse()?),
+                    )
+                } else if input.starts_with("&mut ") {
+                    RefMut(Box::new(input[5..input.len()].parse()?))
+                } else if input.starts_with("&") {
+                    Ref(Box::new(input[1..input.len()].parse()?))
+                } else if input.starts_with("*const ") {
+                    Ptr(Box::new(input[7..input.len()].parse()?))
+                } else if input.starts_with("*mut ") {
+                    PtrMut(Box::new(input[5..].parse()?))
+                } else {
+                    return Err(());
+                }
+            }
         })
     }
 }
@@ -91,6 +133,7 @@ impl core::fmt::Display for Type {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         use Type::*;
         match self {
+            Any => write!(f, "Any"),
             Unit => write!(f, "()"),
             Bool => write!(f, "bool"),
             F32 => write!(f, "f32"),
@@ -107,9 +150,13 @@ impl core::fmt::Display for Type {
             I64 => write!(f, "i64"),
             I128 => write!(f, "i128"),
             Isize => write!(f, "isize"),
+            Range(t) => write!(f, "Range<{}>", t),
             Char => write!(f, "char"),
             Str => write!(f, "str"),
             String => write!(f, "String"),
+            Box(t) => write!(f, "Box<{}>", t),
+            Vec(t) => write!(f, "Vec<{}>", t),
+            Map(k, v) => write!(f, "BTreeMap<{}, {}>", k, v),
             Ref(t) => write!(f, "&{}", t),
             RefMut(t) => write!(f, "&mut {}", t),
             Ptr(t) => write!(f, "*const {}", t),
