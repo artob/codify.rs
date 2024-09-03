@@ -11,60 +11,91 @@ use crate::{
 pub enum Type {
     /// See: https://doc.rust-lang.org/core/any/index.html
     Any,
+
     /// See: https://doc.rust-lang.org/reference/types/tuple.html
     Unit,
+
     /// See: https://doc.rust-lang.org/reference/types/boolean.html
     Bool,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#floating-point-types
     F32,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#floating-point-types
     F64,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     U8,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     U16,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     U32,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     U64,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     U128,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#machine-dependent-integer-types
     Usize,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     I8,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     I16,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     I32,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     I64,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#integer-types
     I128,
+
     /// See: https://doc.rust-lang.org/reference/types/numeric.html#machine-dependent-integer-types
     Isize,
+
     /// See: https://doc.rust-lang.org/core/ops/struct.Range.html
     Range(Box<Type>),
+
     /// See: https://doc.rust-lang.org/reference/types/textual.html
     Char,
+
     /// See: https://doc.rust-lang.org/reference/types/textual.html
     Str,
+
     /// See: https://doc.rust-lang.org/alloc/string/struct.String.html
     String,
+
     /// See: https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html
     Box(Box<Type>),
+
     /// See: https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html
     Vec(Box<Type>),
+
     /// See: https://doc.rust-lang.org/alloc/collections/btree_map/struct.BTreeMap.html
     Map(Box<Type>, Box<Type>),
+
     /// See: https://doc.rust-lang.org/reference/types/pointer.html#shared-references-
     Ref(Box<Type>),
+
     /// See: https://doc.rust-lang.org/reference/types/pointer.html#mutable-references-mut
     RefMut(Box<Type>),
+
     /// See: https://doc.rust-lang.org/reference/types/pointer.html#raw-pointers-const-and-mut
     Ptr(Box<Type>),
+
     /// See: https://doc.rust-lang.org/reference/types/pointer.html#raw-pointers-const-and-mut
     PtrMut(Box<Type>),
+
+    /// See: https://doc.rust-lang.org/std/ffi/index.html
+    #[cfg(feature = "language-c")]
+    Ffi(crate::c::Type),
 }
 
 impl core::str::FromStr for Type {
@@ -121,6 +152,27 @@ impl core::str::FromStr for Type {
                     Ptr(Box::new(input[7..input.len()].parse()?))
                 } else if input.starts_with("*mut ") {
                     PtrMut(Box::new(input[5..].parse()?))
+                } else if input.starts_with("c_") {
+                    #[cfg(not(feature = "language-c"))]
+                    return Err(());
+                    #[cfg(feature = "language-c")]
+                    match input {
+                        "c_void" => Ffi(crate::c::Type::Void),
+                        "c_float" => Ffi(crate::c::Type::Float),
+                        "c_double" => Ffi(crate::c::Type::Double),
+                        "c_char" => Ffi(crate::c::Type::Char),
+                        "c_schar" => Ffi(crate::c::Type::SChar),
+                        "c_short" => Ffi(crate::c::Type::Short),
+                        "c_int" => Ffi(crate::c::Type::Int),
+                        "c_long" => Ffi(crate::c::Type::Long),
+                        "c_longlong" => Ffi(crate::c::Type::LongLong),
+                        "c_uchar" => Ffi(crate::c::Type::UChar),
+                        "c_ushort" => Ffi(crate::c::Type::UShort),
+                        "c_uint" => Ffi(crate::c::Type::UInt),
+                        "c_ulong" => Ffi(crate::c::Type::ULong),
+                        "c_ulonglong" => Ffi(crate::c::Type::ULongLong),
+                        _ => return Err(()),
+                    }
                 } else {
                     return Err(());
                 }
@@ -161,6 +213,26 @@ impl core::fmt::Display for Type {
             RefMut(t) => write!(f, "&mut {}", t),
             Ptr(t) => write!(f, "*const {}", t),
             PtrMut(t) => write!(f, "*mut {}", t),
+            #[cfg(feature = "language-c")]
+            Ffi(t) => match t {
+                crate::c::Type::Void => write!(f, "c_void"),
+                crate::c::Type::Bool => write!(f, "bool"),
+                crate::c::Type::Float => write!(f, "c_float"),
+                crate::c::Type::Double => write!(f, "c_double"),
+                crate::c::Type::Char => write!(f, "c_char"),
+                crate::c::Type::SChar => write!(f, "c_schar"),
+                crate::c::Type::Short => write!(f, "c_short"),
+                crate::c::Type::Int => write!(f, "c_int"),
+                crate::c::Type::Long => write!(f, "c_long"),
+                crate::c::Type::LongLong => write!(f, "c_longlong"),
+                crate::c::Type::UChar => write!(f, "c_uchar"),
+                crate::c::Type::UShort => write!(f, "c_ushort"),
+                crate::c::Type::UInt => write!(f, "c_uint"),
+                crate::c::Type::ULong => write!(f, "c_ulong"),
+                crate::c::Type::ULongLong => write!(f, "c_ulonglong"),
+                crate::c::Type::Ptr(t) => write!(f, "*const {}", Ffi((**t).clone())),
+                crate::c::Type::PtrMut(t) => write!(f, "*mut {}", Ffi((**t).clone())),
+            },
         }
     }
 }
