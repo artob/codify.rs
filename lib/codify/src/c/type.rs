@@ -10,24 +10,40 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Type {
     Void,
+
     /// See: https://en.cppreference.com/w/c/types/boolean
     Bool,
+
     /// See: https://en.wikipedia.org/wiki/Single-precision_floating-point_format
     Float,
+
     /// See: https://en.wikipedia.org/wiki/Double-precision_floating-point_format
     Double,
+
     Char,
+
     SChar,
+
     Short,
+
     Int,
+
     Long,
+
     LongLong,
+
     UChar,
+
     UShort,
+
     UInt,
+
     ULong,
+
     ULongLong,
+
     Ptr(Box<Type>),
+
     PtrMut(Box<Type>),
 }
 
