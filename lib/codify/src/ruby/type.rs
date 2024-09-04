@@ -121,6 +121,8 @@ impl core::fmt::Display for Type {
                 crate::c::Type::UInt => write!(f, ":uint"),
                 crate::c::Type::ULong => write!(f, ":ulong"),
                 crate::c::Type::ULongLong => write!(f, ":ulong_long"),
+                crate::c::Type::Array(t, None) => write!(f, ":pointer"),
+                crate::c::Type::Array(t, Some(n)) => write!(f, "[{}, {}]", Ffi((**t).clone()), n),
                 crate::c::Type::Ptr(t) if **t == crate::c::Type::Char => write!(f, ":string"),
                 crate::c::Type::PtrMut(t) if **t == crate::c::Type::Char => write!(f, ":pointer"),
                 crate::c::Type::Ptr(_) | crate::c::Type::PtrMut(_) => write!(f, ":pointer"),

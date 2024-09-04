@@ -42,6 +42,8 @@ pub enum Type {
 
     ULongLong,
 
+    Array(Box<Type>, Option<usize>),
+
     Ptr(Box<Type>),
 
     PtrMut(Box<Type>),
@@ -68,6 +70,17 @@ impl core::str::FromStr for Type {
             "unsigned int" | "unsigned" => UInt,
             "unsigned long" | "unsigned long int" => ULong,
             "unsigned long long" | "unsigned long long int" => ULongLong,
+            _ if input.ends_with("[]") => {
+                let input = input.trim_end_matches("[]");
+                Array(Box::new(input.parse()?), None)
+            }
+            _ if input.ends_with(']') && input.contains('[') => {
+                let input = input.trim_end_matches(']');
+                let mut parts = input.split('[');
+                let t = parts.next().unwrap().parse()?;
+                let n = parts.next().unwrap().parse().ok();
+                Array(Box::new(t), n)
+            }
             _ if input.ends_with('*') && input.starts_with("const ") => {
                 Ptr(Box::new(input[6..input.len() - 1].trim().parse()?))
             }
@@ -96,6 +109,8 @@ impl core::fmt::Display for Type {
             UInt => write!(f, "unsigned int"),
             ULong => write!(f, "unsigned long"),
             ULongLong => write!(f, "unsigned long long"),
+            Array(t, None) => write!(f, "{}[]", t),
+            Array(t, Some(n)) => write!(f, "{}[{}]", t, n),
             Ptr(t) => write!(f, "const {}*", t),
             PtrMut(t) => write!(f, "{}*", t),
         }

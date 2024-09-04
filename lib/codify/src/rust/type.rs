@@ -230,6 +230,8 @@ impl core::fmt::Display for Type {
                 crate::c::Type::UInt => write!(f, "c_uint"),
                 crate::c::Type::ULong => write!(f, "c_ulong"),
                 crate::c::Type::ULongLong => write!(f, "c_ulonglong"),
+                crate::c::Type::Array(t, None) => write!(f, "*const {}", Ffi((**t).clone())),
+                crate::c::Type::Array(t, Some(n)) => write!(f, "[{}; {}]", Ffi((**t).clone()), n),
                 crate::c::Type::Ptr(t) => write!(f, "*const {}", Ffi((**t).clone())),
                 crate::c::Type::PtrMut(t) => write!(f, "*mut {}", Ffi((**t).clone())),
             },
