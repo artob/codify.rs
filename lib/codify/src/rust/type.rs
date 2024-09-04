@@ -237,6 +237,8 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Array(t, Some(n)) => write!(f, "[{}; {}]", Ffi((**t).clone()), n),
                 crate::c::Type::Ptr(t) => write!(f, "*const {}", Ffi((**t).clone())),
                 crate::c::Type::PtrMut(t) => write!(f, "*mut {}", Ffi((**t).clone())),
+                #[cfg(feature = "libc")]
+                crate::c::Type::Time_t => write!(f, "libc::time_t"),
             },
         }
     }

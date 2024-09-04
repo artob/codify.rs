@@ -53,6 +53,11 @@ pub enum Type {
     Ptr(Box<Type>),
 
     PtrMut(Box<Type>),
+
+    /// See: https://docs.rs/libc/latest/libc/type.time_t.html
+    #[cfg(feature = "libc")]
+    #[allow(non_camel_case_types)]
+    Time_t,
 }
 
 impl core::str::FromStr for Type {
@@ -78,6 +83,8 @@ impl core::str::FromStr for Type {
             "unsigned long" | "unsigned long int" => ULong,
             "unsigned long long" | "unsigned long long int" => ULongLong,
             "size_t" => Size_t,
+            #[cfg(feature = "libc")]
+            "time_t" => Time_t,
             _ if input.ends_with("[]") => {
                 let input = input.trim_end_matches("[]");
                 Array(Box::new(input.parse()?), None)
@@ -123,6 +130,8 @@ impl core::fmt::Display for Type {
             Array(t, Some(n)) => write!(f, "{}[{}]", t, n),
             Ptr(t) => write!(f, "const {}*", t),
             PtrMut(t) => write!(f, "{}*", t),
+            #[cfg(feature = "libc")]
+            Time_t => write!(f, "time_t"),
         }
     }
 }

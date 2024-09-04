@@ -2,6 +2,8 @@
 
 /// The set of features that are enabled in this build of the crate.
 pub static FEATURES: &[&str] = &[
+    #[cfg(feature = "libc")]
+    "libc",
     #[cfg(feature = "serde")]
     "serde",
 ];

@@ -128,6 +128,8 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Ptr(t) if **t == crate::c::Type::Char => write!(f, ":string"),
                 crate::c::Type::PtrMut(t) if **t == crate::c::Type::Char => write!(f, ":pointer"),
                 crate::c::Type::Ptr(_) | crate::c::Type::PtrMut(_) => write!(f, ":pointer"),
+                #[cfg(feature = "libc")]
+                crate::c::Type::Time_t => write!(f, ":time_t"),
             },
         }
     }

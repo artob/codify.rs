@@ -69,6 +69,8 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Ptr(t) | crate::c::Type::PtrMut(t) => {
                     write!(f, "POINTER({})", Ffi((**t).clone()))
                 }
+                #[cfg(feature = "libc")]
+                crate::c::Type::Time_t => write!(f, "c_time_t"),
             },
         }
     }
