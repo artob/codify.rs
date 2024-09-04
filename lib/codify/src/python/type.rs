@@ -14,7 +14,7 @@ pub enum Type {
     /// See: https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex
     Float,
 
-    /// See: https://rubygems.org/gems/ffi
+    /// See: https://docs.python.org/3/library/ctypes.html#fundamental-data-types
     #[cfg(feature = "language-c")]
     Ffi(crate::c::Type),
 }
@@ -53,11 +53,13 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Int => write!(f, "c_int"),
                 crate::c::Type::Long => write!(f, "c_long"),
                 crate::c::Type::LongLong => write!(f, "c_longlong"),
+                crate::c::Type::SSize_t => write!(f, "c_ssize_t"),
                 crate::c::Type::UChar => write!(f, "c_ubyte"),
                 crate::c::Type::UShort => write!(f, "c_ushort"),
                 crate::c::Type::UInt => write!(f, "c_uint"),
                 crate::c::Type::ULong => write!(f, "c_ulong"),
                 crate::c::Type::ULongLong => write!(f, "c_ulonglong"),
+                crate::c::Type::Size_t => write!(f, "c_size_t"),
                 crate::c::Type::Array(t, None) => write!(f, "POINTER({})", Ffi((**t).clone())),
                 crate::c::Type::Array(t, Some(n)) => write!(f, "{} * {}", Ffi((**t).clone()), n),
                 crate::c::Type::Ptr(t) if **t == crate::c::Type::Char => write!(f, "c_char_p"),

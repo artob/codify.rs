@@ -32,6 +32,9 @@ pub enum Type {
 
     LongLong,
 
+    #[allow(non_camel_case_types)]
+    SSize_t,
+
     UChar,
 
     UShort,
@@ -41,6 +44,9 @@ pub enum Type {
     ULong,
 
     ULongLong,
+
+    #[allow(non_camel_case_types)]
+    Size_t,
 
     Array(Box<Type>, Option<usize>),
 
@@ -65,11 +71,13 @@ impl core::str::FromStr for Type {
             "int" | "signed" | "signed int" => Int,
             "long" | "long int" | "signed long" | "signed long int" => Long,
             "long long" | "long long int" | "signed long long" | "signed long long int" => LongLong,
+            "ssize_t" => SSize_t,
             "unsigned char" => UChar,
             "unsigned short" | "unsigned short int" => UShort,
             "unsigned int" | "unsigned" => UInt,
             "unsigned long" | "unsigned long int" => ULong,
             "unsigned long long" | "unsigned long long int" => ULongLong,
+            "size_t" => Size_t,
             _ if input.ends_with("[]") => {
                 let input = input.trim_end_matches("[]");
                 Array(Box::new(input.parse()?), None)
@@ -104,11 +112,13 @@ impl core::fmt::Display for Type {
             Int => write!(f, "int"),
             Long => write!(f, "long"),
             LongLong => write!(f, "long long"),
+            SSize_t => write!(f, "ssize_t"),
             UChar => write!(f, "unsigned char"),
             UShort => write!(f, "unsigned short"),
             UInt => write!(f, "unsigned int"),
             ULong => write!(f, "unsigned long"),
             ULongLong => write!(f, "unsigned long long"),
+            Size_t => write!(f, "size_t"),
             Array(t, None) => write!(f, "{}[]", t),
             Array(t, Some(n)) => write!(f, "{}[{}]", t, n),
             Ptr(t) => write!(f, "const {}*", t),

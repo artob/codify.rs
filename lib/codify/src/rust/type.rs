@@ -215,6 +215,7 @@ impl core::fmt::Display for Type {
             PtrMut(t) => write!(f, "*mut {}", t),
             #[cfg(feature = "language-c")]
             Ffi(t) => match t {
+                // See: https://doc.rust-lang.org/std/ffi/index.html
                 crate::c::Type::Void => write!(f, "c_void"),
                 crate::c::Type::Bool => write!(f, "bool"),
                 crate::c::Type::Float => write!(f, "c_float"),
@@ -225,11 +226,13 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Int => write!(f, "c_int"),
                 crate::c::Type::Long => write!(f, "c_long"),
                 crate::c::Type::LongLong => write!(f, "c_longlong"),
+                crate::c::Type::SSize_t => write!(f, "isize"),
                 crate::c::Type::UChar => write!(f, "c_uchar"),
                 crate::c::Type::UShort => write!(f, "c_ushort"),
                 crate::c::Type::UInt => write!(f, "c_uint"),
                 crate::c::Type::ULong => write!(f, "c_ulong"),
                 crate::c::Type::ULongLong => write!(f, "c_ulonglong"),
+                crate::c::Type::Size_t => write!(f, "usize"),
                 crate::c::Type::Array(t, None) => write!(f, "*const {}", Ffi((**t).clone())),
                 crate::c::Type::Array(t, Some(n)) => write!(f, "[{}; {}]", Ffi((**t).clone()), n),
                 crate::c::Type::Ptr(t) => write!(f, "*const {}", Ffi((**t).clone())),
