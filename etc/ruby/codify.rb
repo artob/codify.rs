@@ -54,7 +54,7 @@ module Codify
     end
     case status.exitstatus
       when 0 then out.rstrip
-      else raise Error::UnexpectedExit.new(status.exitstatus, err.rstrip)
+      else raise Error::UnexpectedExit.new([command] + args, status.exitstatus, err.rstrip)
     end
   end
 
@@ -75,8 +75,9 @@ module Codify
       ##
       # @param [Integer, #to_i] code
       # @param [String, #to_s] message
-      def initialize(code, message)
-        super "The `#{PROGRAM}` program exited with code #{code.to_i}: #{message}"
+      def initialize(command, code, message)
+        command = command.map(&:to_s).map { |s| s.include?(' ') ? "'#{s}'" : s }.join(' ')
+        super "The `#{PROGRAM} #{command}` process exited with code #{code.to_i}: #{message}"
       end
     end # UnexpectedExit
   end # Error
