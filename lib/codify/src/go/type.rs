@@ -8,8 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://go.dev/ref/spec#Boolean_types
     Bool,
+
     /// See: https://go.dev/ref/spec#Numeric_types
     Float32,
+
     /// See: https://go.dev/ref/spec#Numeric_types
     Float64,
 }

@@ -8,6 +8,7 @@ use crate::rust;
 pub enum Type {
     /// See: https://dart.dev/language/built-in-types#booleans
     Bool,
+
     /// See: https://api.dart.dev/stable/dart-core/double-class.html
     Double,
 }

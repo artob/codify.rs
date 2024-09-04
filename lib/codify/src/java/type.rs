@@ -8,8 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html
     Boolean,
+
     /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Float.html
     Float,
+
     /// See: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html
     Double,
 }

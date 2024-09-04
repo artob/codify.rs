@@ -8,8 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/bool
     Bool,
+
     /// See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
     Float,
+
     /// See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
     Double,
 }

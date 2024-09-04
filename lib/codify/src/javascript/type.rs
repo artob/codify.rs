@@ -8,6 +8,7 @@ use crate::rust;
 pub enum Type {
     /// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#boolean_type
     Boolean,
+
     /// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type
     Number,
 }

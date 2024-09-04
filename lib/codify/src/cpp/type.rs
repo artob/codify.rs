@@ -8,8 +8,10 @@ use crate::rust;
 pub enum Type {
     /// See: https://en.cppreference.com/w/cpp/keyword/bool
     Bool,
+
     /// See: https://en.wikipedia.org/wiki/Single-precision_floating-point_format
     Float,
+
     /// See: https://en.wikipedia.org/wiki/Double-precision_floating-point_format
     Double,
 }

@@ -8,6 +8,7 @@ use crate::rust;
 pub enum Type {
     /// See: https://developer.apple.com/documentation/swift/bool
     Bool,
+
     /// See: https://developer.apple.com/documentation/swift/double
     Double,
 }
