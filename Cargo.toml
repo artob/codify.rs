@@ -16,7 +16,7 @@ readme = true
 homepage = "https://codify.rs"
 repository = "https://github.com/artob/codify.rs"
 license = "Unlicense"
-keywords = ["abi", "ffi", "polyglot"]
+keywords = ["codegen", "abi", "ffi", "polyglot"]
 categories = ["command-line-utilities", "development-tools::ffi", "no-std"]
 publish = true
 
