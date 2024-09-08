@@ -1,6 +1,9 @@
 // This is free and unencumbered software released into the public domain.
 
-use crate::rust;
+use crate::{
+    prelude::{fmt, format, Cow, Named},
+    rust,
+};
 
 /// See: https://docs.oracle.com/javase%2Ftutorial%2F/java/nutsandbolts/datatypes.html
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -30,14 +33,20 @@ impl core::str::FromStr for Type {
     }
 }
 
-impl core::fmt::Display for Type {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Type::*;
         match self {
             Boolean => write!(f, "boolean"),
             Float => write!(f, "float"),
             Double => write!(f, "double"),
         }
+    }
+}
+
+impl Named for Type {
+    fn name(&self) -> Cow<str> {
+        Cow::Owned(format!("{}", self))
     }
 }
 

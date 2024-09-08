@@ -6,4 +6,6 @@ pub static FEATURES: &[&str] = &[
     "libc",
     #[cfg(feature = "serde")]
     "serde",
+    #[cfg(feature = "unstable")]
+    "unstable",
 ];

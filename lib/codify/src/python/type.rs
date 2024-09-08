@@ -1,6 +1,9 @@
 // This is free and unencumbered software released into the public domain.
 
-use crate::rust;
+use crate::{
+    prelude::{fmt, format, Cow, Named},
+    rust,
+};
 
 /// See: https://docs.python.org/3/library/stdtypes.html
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -33,8 +36,8 @@ impl core::str::FromStr for Type {
     }
 }
 
-impl core::fmt::Display for Type {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Type::*;
         match self {
             NoneType => write!(f, "NoneType"),
@@ -73,6 +76,12 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Time_t => write!(f, "c_time_t"),
             },
         }
+    }
+}
+
+impl Named for Type {
+    fn name(&self) -> Cow<str> {
+        Cow::Owned(format!("{}", self))
     }
 }
 

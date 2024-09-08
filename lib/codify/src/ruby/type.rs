@@ -1,7 +1,7 @@
 // This is free and unencumbered software released into the public domain.
 
 use crate::{
-    prelude::{Box, String},
+    prelude::{fmt, format, Box, Cow, Named, String},
     rust,
 };
 use itertools::Itertools;
@@ -88,8 +88,8 @@ impl core::str::FromStr for Type {
     }
 }
 
-impl core::fmt::Display for Type {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Type::*;
         match self {
             Object => write!(f, "Object"),
@@ -123,7 +123,7 @@ impl core::fmt::Display for Type {
                 crate::c::Type::ULong => write!(f, ":ulong"),
                 crate::c::Type::ULongLong => write!(f, ":ulong_long"),
                 crate::c::Type::Size_t => write!(f, ":size_t"),
-                crate::c::Type::Array(t, None) => write!(f, ":pointer"),
+                crate::c::Type::Array(_t, None) => write!(f, ":pointer"),
                 crate::c::Type::Array(t, Some(n)) => write!(f, "[{}, {}]", Ffi((**t).clone()), n),
                 crate::c::Type::Ptr(t) if **t == crate::c::Type::Char => write!(f, ":string"),
                 crate::c::Type::PtrMut(t) if **t == crate::c::Type::Char => write!(f, ":pointer"),
@@ -132,6 +132,12 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Time_t => write!(f, ":time_t"),
             },
         }
+    }
+}
+
+impl Named for Type {
+    fn name(&self) -> Cow<str> {
+        Cow::Owned(format!("{}", self))
     }
 }
 

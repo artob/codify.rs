@@ -2,7 +2,7 @@
 
 use super::Type;
 use crate::{
-    prelude::{Box, FromStr},
+    prelude::{Box, Cow, FromStr, Named},
     rust,
 };
 
@@ -124,8 +124,6 @@ impl Language {
 
             #[cfg(feature = "language-typescript")]
             TypeScript => Box::new(crate::typescript::Type::from_str(input)?),
-
-            _ => return Err(()),
         })
     }
 
@@ -219,5 +217,11 @@ impl core::str::FromStr for Language {
 impl core::fmt::Display for Language {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.write_str(self.as_str())
+    }
+}
+
+impl Named for Language {
+    fn name(&self) -> Cow<str> {
+        Cow::Borrowed(self.as_str())
     }
 }

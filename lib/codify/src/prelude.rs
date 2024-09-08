@@ -12,9 +12,13 @@ extern crate alloc;
 use std as alloc;
 
 pub use alloc::{
+    borrow::Cow,
     boxed::Box,
+    fmt, format,
     string::{String, ToString},
     vec::Vec,
 };
 
 pub use core::{result::Result, str::FromStr};
+
+pub use dogma::traits::Named;

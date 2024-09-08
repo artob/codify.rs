@@ -1,7 +1,7 @@
 // This is free and unencumbered software released into the public domain.
 
 use crate::{
-    prelude::{Box, String},
+    prelude::{fmt, format, Box, Cow, Named},
     rust,
 };
 
@@ -54,6 +54,8 @@ pub enum Type {
 
     PtrMut(Box<Type>),
 
+    /// TODO: clock_t, errno_t, int*_t, uint*_t.
+
     /// See: https://docs.rs/libc/latest/libc/type.time_t.html
     #[cfg(feature = "libc")]
     #[allow(non_camel_case_types)]
@@ -105,8 +107,8 @@ impl core::str::FromStr for Type {
     }
 }
 
-impl core::fmt::Display for Type {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Type::*;
         match self {
             Void => write!(f, "void"),
@@ -133,6 +135,12 @@ impl core::fmt::Display for Type {
             #[cfg(feature = "libc")]
             Time_t => write!(f, "time_t"),
         }
+    }
+}
+
+impl Named for Type {
+    fn name(&self) -> Cow<str> {
+        Cow::Owned(format!("{}", self))
     }
 }
 

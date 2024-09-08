@@ -1,7 +1,7 @@
 // This is free and unencumbered software released into the public domain.
 
 use crate::{
-    prelude::{Box, String},
+    prelude::{fmt, format, Box, Cow, Named},
     rust,
 };
 
@@ -181,8 +181,8 @@ impl core::str::FromStr for Type {
     }
 }
 
-impl core::fmt::Display for Type {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Type::*;
         match self {
             Any => write!(f, "Any"),
@@ -241,6 +241,12 @@ impl core::fmt::Display for Type {
                 crate::c::Type::Time_t => write!(f, "libc::time_t"),
             },
         }
+    }
+}
+
+impl Named for Type {
+    fn name(&self) -> Cow<str> {
+        Cow::Owned(format!("{}", self))
     }
 }
 
