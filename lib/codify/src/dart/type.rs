@@ -24,13 +24,13 @@ pub enum Type {
     /// See: https://api.dart.dev/stable/dart-core/int-class.html
     Int,
 
-    /// See: https://api.dart.dev/stable/3.5.3/dart-core/BigInt-class.html
+    /// See: https://api.dart.dev/stable/dart-core/BigInt-class.html
     BigInt,
 
-    /// See: https://api.dart.dev/stable/3.5.3/dart-core/String-class.html
+    /// See: https://api.dart.dev/stable/dart-core/String-class.html
     String,
 
-    /// See: https://api.dart.dev/stable/3.5.3/dart-core/List-class.html
+    /// See: https://api.dart.dev/stable/dart-core/List-class.html
     List(Box<Type>),
 
     /// See: https://api.dart.dev/stable/dart-core/Map-class.html
