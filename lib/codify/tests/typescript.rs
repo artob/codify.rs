@@ -3,9 +3,10 @@ use codify::{rust, ToRust};
 
 #[test]
 fn typescript_to_rust_and_back() {
-    let type_map: [(Type, rust::Type); 6] = [
+    let type_map: [(Type, rust::Type); 7] = [
         (Type::Any, rust::Type::Any),
         (Type::Boolean, rust::Type::Bool),
+        (Type::Number, rust::Type::F64),
         (Type::BigInt, rust::Type::I128),
         (Type::String, rust::Type::String),
         (
@@ -13,8 +14,8 @@ fn typescript_to_rust_and_back() {
             rust::Type::Vec(Box::new(rust::Type::I128)),
         ),
         (
-            Type::Map(Box::new(Type::String), Box::new(Type::String)),
-            rust::Type::Map(Box::new(rust::Type::String), Box::new(rust::Type::String)),
+            Type::Map(Box::new(Type::String), Box::new(Type::Number)),
+            rust::Type::Map(Box::new(rust::Type::String), Box::new(rust::Type::F64)),
         ),
     ];
 

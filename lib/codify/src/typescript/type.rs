@@ -148,7 +148,7 @@ impl crate::ToRust for Type {
             Any => rust::Type::Any,
             Undefined => return None,
             Boolean => rust::Type::Bool,
-            Number => unimplemented!(),
+            Number => rust::Type::F64,
             BigInt => rust::Type::I128,
             String => rust::Type::String,
             Array(t) => rust::Type::Vec(Box::new(t.to_rust()?)),
