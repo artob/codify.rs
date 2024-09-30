@@ -112,8 +112,8 @@ impl Type {
             crate::c::Type::Ptr(t) if **t == crate::c::Type::Void => write!(f, "c_void_p"),
             crate::c::Type::PtrMut(t) if **t == crate::c::Type::Void => write!(f, "c_void_p"),
             crate::c::Type::Ptr(t) | crate::c::Type::PtrMut(t) | crate::c::Type::Array(t, None) => {
-                // POINTER({ffi})
-                // POINTER(c_uint)
+                // Format: POINTER({ffi})
+                // Example: POINTER(c_uint)
                 write!(f, "POINTER(")?;
                 Self::write_ffi(f, &**t)?;
                 write!(f, ")")?;
